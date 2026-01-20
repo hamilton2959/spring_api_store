@@ -1,4 +1,5 @@
 package com.example.spring_api.mappers;
+import com.example.spring_api.dtos.RegisterUserRequest;
 import com.example.spring_api.mappers.UserMapper;
 
 import com.example.spring_api.dtos.UserDto;
@@ -11,4 +12,5 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     //@Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     UserDto toDto(User user);
+    User toEntity(RegisterUserRequest request);
 }
