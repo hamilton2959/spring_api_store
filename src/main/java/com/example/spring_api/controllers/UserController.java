@@ -1,16 +1,13 @@
 package com.example.spring_api.controllers;
 
 import com.example.spring_api.dtos.UserDto;
-import com.example.spring_api.entities.User;
 import com.example.spring_api.mappers.UserMapper;
 import com.example.spring_api.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -22,12 +19,15 @@ public class UserController {
 
     @GetMapping
     public Iterable<UserDto> getAllUsers(
-            @RequestParam(required = false, defaultValue = "") String sort
+            @RequestHeader(name = "x-auth-token") String authToken,
+            @RequestParam(required = false, defaultValue = "", name = "sort") String sortBy
     ) {
-        if (!Set.of("name", "email").contains(sort))
-            sort =  "name";
+        System.out.println(authToken);
 
-        return userRepository.findAll(Sort.by(sort))
+        if (!Set.of("name", "email").contains(sortBy))
+            sortBy =  "name";
+
+        return userRepository.findAll(Sort.by(sortBy))
                 .stream()
                 .map(userMapper::toDto)
                 .toList();
